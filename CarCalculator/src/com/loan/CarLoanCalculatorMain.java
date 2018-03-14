@@ -12,12 +12,12 @@ public class CarLoanCalculatorMain {
 		//System.out.println(constant.getKey());
 		//System.out.println(constant.getValue());
 		
-	/*	JFrame frame = new SwingControlDemo();
+		JFrame frame = new SwingControlDemo();
        frame.setTitle("Car Payment Calculator");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
-		*/
-		CarLoanConstants cc =new CarLoanConstants();
+		
+		/*CarLoanConstants cc =new CarLoanConstants();
 		cc.setCarPrice(20000);
 		cc.setTradeInValue(4000);
 		cc.setInterestRate(4.5);
@@ -31,7 +31,7 @@ public class CarLoanCalculatorMain {
 	//c.calculateCarPrice(cc);
 	//c.createAmortizationTable(cc);
 	//c.calculateInterestRate(cc);
-	c.buildModel(37);
+	c.buildModel(37);*/
 	}
 
 }
