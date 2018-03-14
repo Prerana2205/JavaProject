@@ -122,14 +122,20 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		tradeInFormattedTextField = new JFormattedTextField(carPriceFormat);
 		tradeInFormattedTextField.setBounds(12, 297, 134, 22);
 		getContentPane().add(tradeInFormattedTextField);
+		tradeInFormattedTextField.setValue(new Double(tradeInValue));
+		tradeInFormattedTextField.addPropertyChangeListener("value", this);
 
 		interestRateFormattedTextField = new JFormattedTextField(interestRateFormat);
 		interestRateFormattedTextField.setBounds(12, 372, 134, 22);
 		getContentPane().add(interestRateFormattedTextField);
+		interestRateFormattedTextField.setValue(new Double(rate));
+		interestRateFormattedTextField.addPropertyChangeListener("value", this);
 
 		numberOfMonthsFormattedTextField = new JFormattedTextField(numberMonthsFormat);
 		numberOfMonthsFormattedTextField.setBounds(12, 441, 134, 22);
 		getContentPane().add(numberOfMonthsFormattedTextField);
+		numberOfMonthsFormattedTextField.setValue(new Integer(numPeriods));
+		numberOfMonthsFormattedTextField.addPropertyChangeListener("value", this);
 
 		final JLabel lblAfterNegotiations = new JLabel("After negotiations");
 		lblAfterNegotiations.setBounds(12, 207, 116, 16);
@@ -211,22 +217,29 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		final Object source = e.getSource();
 		if (source == carPriceFormattedTextField) {
 			carPrice = ((Number)carPriceFormattedTextField.getValue()).doubleValue();
-		} else if (source == interestRateFormattedTextField) {
+		}
+		if (source == interestRateFormattedTextField) {
 			rate = ((Number)interestRateFormattedTextField.getValue()).doubleValue();
-		} else if (source == numberOfMonthsFormattedTextField) {
+		}
+		if (source == numberOfMonthsFormattedTextField) {
 			numPeriods = ((Number)numberOfMonthsFormattedTextField.getValue()).intValue();
-		}else if(source ==tradeInFormattedTextField){
+		}
+		if(source ==tradeInFormattedTextField){
 			tradeInValue = ((Number)tradeInFormattedTextField.getValue()).intValue();
 		}
 
 
 		carLoanConstants.setCarPrice(carPrice);
+		System.out.println("**Car Price "+carPrice);
 		carLoanConstants.setInterestRate(rate);
 		carLoanConstants.setTradeInValue(tradeInValue);
+		System.out.println("**TradeIn value "+tradeInValue);
 		carLoanConstants.setNumberOfMonths(numPeriods);
+		System.out.println("*Number Periods "+numPeriods);
 
 		try {
 			carLoanCalculator.calculateMonthlyPayment();
+			carLoanCalculator.calculateTotalAmountPaid();
 		} catch (final CarLoanException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
