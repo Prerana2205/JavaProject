@@ -26,7 +26,7 @@ public class CarLoanConstants {
 	 * 		car price
 	 */
 	public double getCarPrice() {
-		return carPrice ;
+		return carPrice; //cent calculation
 	}
 
 	public double getInterestRate() {

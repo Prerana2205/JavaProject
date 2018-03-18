@@ -2,12 +2,20 @@ package com.loan;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CarLoanCalculator {
 
 	/** Car loan constant variable */
 	private final CarLoanConstants carLoanConstants;
+	
+	public CarLoanConstants getCarLoanConstants() {
+		return carLoanConstants;
+	}
+
+	private List historyData ;
 
 	/** Decimal Format Conversion */
 	DecimalFormat decimalFormat = new DecimalFormat("0.##");
@@ -15,8 +23,51 @@ public class CarLoanCalculator {
 	public CarLoanCalculator(CarLoanConstants carLoanConstants) {
 
 		this.carLoanConstants = carLoanConstants;
+		this.historyData = new ArrayList();
 	}
 
+	/**
+	 *
+	 * Calculates Monthly Payments
+	 *
+	 * @param carLoanConstants
+	 * @return
+	 * @throws CarLoanException
+	 */
+	public void calculateMonthlyPayment() throws CarLoanException {
+		System.out.println("***** Inside calculateMonthlyPayment *******");
+
+		double monthlyPayment;
+		double carPrice = getCarPriceWithoutTradeInValue();
+		final double monthlyInterestRate = getMonthlyInterestRate();
+		final int numberOfMonths = carLoanConstants.getNumberOfMonths();
+
+		if (numberOfMonths == 0 || numberOfMonths >84) {
+			throw new CarLoanException("Number of months should be between 1-84");
+		}
+		if (carPrice == 0.0) {
+			throw new CarLoanException("Car Price is not set");
+		}
+		carPrice = decimalFormatConverstion(carPrice);
+
+		if (monthlyInterestRate > 0) {
+			monthlyPayment = (monthlyInterestRate * carPrice)
+					/ (1 - Math.pow((1 + monthlyInterestRate), -1 * (numberOfMonths))); 
+		} else {
+			monthlyPayment = carPrice / numberOfMonths;
+		}
+
+		final double totalAmount = decimalFormatConverstion(monthlyPayment * numberOfMonths);
+		monthlyPayment = decimalFormatConverstion(monthlyPayment);
+
+		final double lastMonthPayment = totalAmount - (monthlyPayment * (numberOfMonths - 1));
+
+		System.out.println("Monthly payments for the first " + (numberOfMonths - 1) + " are $" + monthlyPayment
+				+ " and \nLast month payment is $" + lastMonthPayment);
+		carLoanConstants.setMonthlyPayment(monthlyPayment);
+
+	}
+	
 	/**
 	 * Calculates the carPrice when monthly payment is present
 	 *
@@ -44,6 +95,33 @@ public class CarLoanCalculator {
 		calCarPrice = calCarPrice + carLoanConstants.getTradeInValue();
 
 		carLoanConstants.setCarPrice(decimalFormatConverstion(calCarPrice));
+
+	}
+	
+	public void calculateTotalAmountPaid() throws CarLoanException {
+		final int numberOfMonths = carLoanConstants.getNumberOfMonths();
+		if (carLoanConstants.getMonthlyPayment() == 0.0) {
+			throw new CarLoanException("Monthly Payment is not Set");
+		}
+
+		// else continue
+		final double totalAmountPaid = (carLoanConstants.getMonthlyPayment() * (numberOfMonths));
+
+		carLoanConstants.setTotalAmountPaid(decimalFormatConverstion(totalAmountPaid));
+
+	}
+
+	public void calculateTotalInterestPaid() {
+		final double totalInterestPaid;
+		if (carLoanConstants.getInterestRate() == 0.0) {
+			totalInterestPaid = 0.0;
+		} else {
+			totalInterestPaid = carLoanConstants.getTotalAmountPaid() - (carLoanConstants.getCarPrice()
+					- carLoanConstants.getTradeInValue());
+		}
+		carLoanConstants.setTotalInterestPaid(decimalFormatConverstion(totalInterestPaid));
+		//System.out.println("Total Amount Paid " + carLoanConstants.getTotalAmountPaid() + " Car price"
+			//	+ carLoanConstants.getCarPrice() + "Total interest paid:" + totalInterestPaid);
 
 	}
 
@@ -90,40 +168,19 @@ public class CarLoanCalculator {
 		carLoanConstants.setInterestRate(mid_rate);
 	}
 
-	public void calculateMonthlyPayment() throws CarLoanException {
-		System.out.println("***** Inside calculateMonthlyPayment *******");
-
-		double monthlyPayment;
-		double carPrice = getCarPriceWithoutTradeInValue();
-		final double monthlyInterestRate = getMonthlyInterestRate();
-		final int numberOfMonths = carLoanConstants.getNumberOfMonths();
-
-		if (carPrice == 0.0) {
-			throw new CarLoanException("Car Price is not set");
-		}
-		carPrice = decimalFormatConverstion(carPrice);
-
-		if (monthlyInterestRate > 0) {
-			monthlyPayment = (monthlyInterestRate * carPrice)
-					/ (1 - Math.pow((1 + monthlyInterestRate), -1 * (numberOfMonths)));
-		} else {
-			monthlyPayment = carPrice / numberOfMonths;
-		}
-
-		final double totalAmount = decimalFormatConverstion(monthlyPayment * 12);
-		monthlyPayment = decimalFormatConverstion(monthlyPayment);
-
-		final double lastMonthPayment = totalAmount - (monthlyPayment * (numberOfMonths - 1));
-
-		System.out.println("Monthly payments for the first " + (numberOfMonths - 1) + " are $" + monthlyPayment
-				+ " and \nLast month payment is $" + lastMonthPayment);
-		carLoanConstants.setMonthlyPayment(monthlyPayment);
-
-	}
+	/**
+	 *
+	 * Calculate number of Months
+	 *
+	 * @param carLoanConstants
+	 * @return
+	 * @throws CarLoanException
+	 */
+	int n = 1;
 
 	public void calculateNumberOfMonths() throws CarLoanException {
 
-		int n = 1;
+		
 
 		final double monthlyPayment = carLoanConstants.getMonthlyPayment();
 		final double monthlyInterestRate = getMonthlyInterestRate();
@@ -134,6 +191,7 @@ public class CarLoanCalculator {
 		}
 
 		if (monthlyInterestRate == 0) {
+			n = (int) (carPrice/monthlyPayment);
 		} else {
 			if ((monthlyInterestRate * carPrice
 					/ (1 - Math.pow((1 + monthlyInterestRate), (0 - n)))) > monthlyPayment) {
@@ -147,26 +205,18 @@ public class CarLoanCalculator {
 		carLoanConstants.setNumberOfMonths(n);
 		System.out.println("months: " + carLoanConstants.getNumberOfMonths());
 	}
+	
+	/**
+	 *
+	 * Calculate Trade in value
+	 *
+	 * @param carLoanConstants
+	 * @return
+	 * @throws CarLoanException
+	 */
 
-	public void calculateTotalAmountPaid() throws CarLoanException {
-		final int numberOfMonths = carLoanConstants.getNumberOfMonths();
-		if (carLoanConstants.getMonthlyPayment() == 0.0) {
-			throw new CarLoanException("Monthly Payment is not Set");
-		}
-
-		// else continue
-		final double totalAmountPaid = (carLoanConstants.getMonthlyPayment() * (numberOfMonths));
-
-		carLoanConstants.setTotalAmountPaid(decimalFormatConverstion(totalAmountPaid));
-
-	}
-
-	public void calculateTotalInterestPaid() {
-
-		final double totalInterestPaid = carLoanConstants.getTotalAmountPaid() - carLoanConstants.getCarPrice();
-
-		carLoanConstants.setTotalInterestPaid(decimalFormatConverstion(totalInterestPaid));
-
+	public void calculateTradeInValue() throws CarLoanException{
+		
 	}
 
 	public void createAmortizationTable(CarLoanConstants carLoanConstants) {
@@ -245,6 +295,23 @@ public class CarLoanCalculator {
 	private double getMonthlyInterestRate() {
 		final double interestRate = carLoanConstants.getInterestRate();
 		return interestRate / 1200;
+	}
+	
+	public List<CarLoanConstants> getHistoryData(){
+		
+		return this.historyData;
+		
+	}
+	
+	public void addHistoryData(){
+		CarLoanConstants carLoan = new CarLoanConstants();
+		carLoan.setCarPrice(this.carLoanConstants.getCarPrice());
+		carLoan.setTradeInValue(this.carLoanConstants.getTradeInValue());
+		carLoan.setNumberOfMonths(this.carLoanConstants.getNumberOfMonths());
+		carLoan.setInterestRate(this.carLoanConstants.getInterestRate());
+		carLoan.setMonthlyPayment(this.carLoanConstants.getMonthlyPayment());
+		this.historyData.add(carLoan);
+		
 	}
 
 }
