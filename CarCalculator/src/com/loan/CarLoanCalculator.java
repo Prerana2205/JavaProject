@@ -43,11 +43,11 @@ public class CarLoanCalculator {
 		final int numberOfMonths = carLoanConstants.getNumberOfMonths();
 
 		if (numberOfMonths == 0 || numberOfMonths >84) {
-			throw new CarLoanException("Number of months should be between 1-84");
+			carLoanConstants.setNumberOfMonths(1);
 		}
-		if (carPrice == 0.0) {
+		/*if (carPrice == 0.0) {
 			throw new CarLoanException("Car Price is not set");
-		}
+		}*/
 		carPrice = decimalFormatConverstion(carPrice);
 
 		if (monthlyInterestRate > 0) {
@@ -180,8 +180,6 @@ public class CarLoanCalculator {
 
 	public void calculateNumberOfMonths() throws CarLoanException {
 
-		
-
 		final double monthlyPayment = carLoanConstants.getMonthlyPayment();
 		final double monthlyInterestRate = getMonthlyInterestRate();
 		final double carPrice = getCarPriceWithoutTradeInValue();
@@ -195,15 +193,15 @@ public class CarLoanCalculator {
 		} else {
 			if ((monthlyInterestRate * carPrice
 					/ (1 - Math.pow((1 + monthlyInterestRate), (0 - n)))) > monthlyPayment) {
-				System.out.println("n is " + n);
+				//System.out.println("n is " + n);
 				//
 				n++;
 				calculateNumberOfMonths();
 			}
 
 		}
-		carLoanConstants.setNumberOfMonths(n);
-		System.out.println("months: " + carLoanConstants.getNumberOfMonths());
+		carLoanConstants.setNumberOfMonths(n-1);
+		//System.out.println("months: " + carLoanConstants.getNumberOfMonths());
 	}
 	
 	/**
@@ -217,9 +215,25 @@ public class CarLoanCalculator {
 
 	public void calculateTradeInValue() throws CarLoanException{
 		
+		final double monthlyPayment = carLoanConstants.getMonthlyPayment();
+		final double monthlyInterestRate = getMonthlyInterestRate();
+		final double numberOfMonths = carLoanConstants.getNumberOfMonths();
+		final double carPrice = carLoanConstants.getCarPrice();
+		final double tradeInValue;
+		
+		if(monthlyInterestRate>0.0){
+			tradeInValue =  carPrice - (monthlyPayment*numberOfMonths);
+		}else{
+			tradeInValue = carPrice - ((monthlyPayment*(1-Math.pow((1+monthlyInterestRate),-numberOfMonths)))/monthlyInterestRate);
+		}
+		carLoanConstants.setTradeInValue(tradeInValue);
+		
 	}
+	
+	
+	
 
-	public void createAmortizationTable(CarLoanConstants carLoanConstants) {
+	public List<LoanAmortization> createAmortizationTable(CarLoanConstants carLoanConstants) {
 		double principle;
 		double payment; // constant
 		double interestPaid;
@@ -262,6 +276,7 @@ public class CarLoanCalculator {
 			interestPaid = principle * monthlyInterest;
 			principlePaid = payment - interestPaid;
 			balance = principle - principlePaid;
+		
 			if (balance < 0) {
 				balance = 0;
 			}
@@ -271,7 +286,8 @@ public class CarLoanCalculator {
 		}
 		System.out.println("TotalAmountPaid:\tTotalInterestPaid:\t TotalPrinciplePaid");
 		System.out.println(totalAmountPaid + "\t\t" + totalInterestPaid + "\t\t" + totalPrinciplePaid);
-		System.out.println(loanAmortization.get(1));
+		//System.out.println(loanAmortization.get(1));
+		return loanAmortization;
 	}
 
 	public void createHistoryTable() {
