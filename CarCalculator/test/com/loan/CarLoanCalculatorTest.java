@@ -58,12 +58,8 @@ public class CarLoanCalculatorTest extends TestCase {
 		final BigDecimal f = new BigDecimal(0.42);
 		System.out.println(" *********"+(a-b));
 		System.out.println(" *********"+(d.subtract(f)));
-		try {
-			carLoanCalculator.calculateMonthlyPayment();
-		} catch (final CarLoanException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		};
+		carLoanCalculator.calculateMonthlyPayment();
+
 		System.out.println(carLoanConstant.getMonthlyPayment());
 	}
 

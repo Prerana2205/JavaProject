@@ -15,11 +15,26 @@ public class CarLoanConstants {
 	/** Number of Months Constant **/
 	private int numberOfMonths = 1;
 
+	/** Mothly payment variable */
 	private double monthlyPayment =0.00;
 
+	/** Total Amount Paid Variable */
 	private double totalAmountPaid =0.00;
 
+	/** Total Interest Paid Variable */
 	private double totalInterestPaid =0.00;
+
+	/** Last Month Payment Variable */
+	private double lastMonthPaymet =0.00;
+
+	/**
+	 * @return the lastMonthPaymet
+	 */
+	public double getLastMonthPaymet() {
+		return lastMonthPaymet;
+	}
+
+
 
 	/**
 	 * @return.
@@ -83,5 +98,12 @@ public class CarLoanConstants {
 		this.tradeInValue = tradeInValue;
 	}
 
+	/**
+	 * Sets the last month payment
+	 * @param lastMonthPaymet
+	 */
+	public void setLastMonthPaymet(double lastMonthPaymet) {
+		this.lastMonthPaymet = lastMonthPaymet;
+	}
 
 }
