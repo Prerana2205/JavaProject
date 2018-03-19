@@ -73,30 +73,57 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		setTitle("Car Payment Calculator");
 		getContentPane().setLayout(null);
 
-		final JLabel lblNewLabel = new JLabel("What's your credit score?");
-		lblNewLabel.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblNewLabel.setBounds(12, 85, 301, 16);
-		getContentPane().add(lblNewLabel);
 
-		final JLabel lblNewLabel_1 = new JLabel("Car price ($)");
-		lblNewLabel_1.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblNewLabel_1.setBounds(12, 242, 186, 16);
-		getContentPane().add(lblNewLabel_1);
+		Font labelFont = new Font("Georgia", Font.BOLD, 13);
+		final JLabel creditScoreLabel = new JLabel("What's your credit score?");
+		creditScoreLabel.setFont(labelFont);
+		creditScoreLabel.setBounds(12, 85, 301, 16);
+		getContentPane().add(creditScoreLabel);
+
+		final JLabel carPriceLabel = new JLabel("Car price ($)");
+		carPriceLabel.setFont(labelFont);
+		carPriceLabel.setBounds(12, 242, 186, 16);
+		getContentPane().add(carPriceLabel);
 
 		final JLabel lblTradeinDown = new JLabel("Trade-in / down payment ($)");
-		lblTradeinDown.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblTradeinDown.setFont(labelFont);
 		lblTradeinDown.setBounds(12, 352, 237, 16);
 		getContentPane().add(lblTradeinDown);
 
 		final JLabel lblInterestRate = new JLabel("Interest rate (%)");
-		lblInterestRate.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblInterestRate.setFont(labelFont);
 		lblInterestRate.setBounds(12, 457, 186, 16);
 		getContentPane().add(lblInterestRate);
 
 		final JLabel lblNumberOfMonths = new JLabel("Number of months");
-		lblNumberOfMonths.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblNumberOfMonths.setFont(labelFont);
 		lblNumberOfMonths.setBounds(12, 561, 186, 16);
 		getContentPane().add(lblNumberOfMonths);
+
+		final JLabel lblMonthlyPayment = new JLabel("Monthly Payment ");
+		lblMonthlyPayment.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblMonthlyPayment.setBounds(488, 117, 172, 28);
+		getContentPane().add(lblMonthlyPayment);
+
+		JLabel lblHistoryTable = new JLabel("History Table");
+		lblHistoryTable.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblHistoryTable.setBounds(488, 518, 140, 27);
+		getContentPane().add(lblHistoryTable);
+
+		JLabel lastMonthPayment = new JLabel("Last Month Payment");
+		lastMonthPayment.setFont(new Font("Georgia", Font.BOLD, 13));
+		lastMonthPayment.setBounds(488, 214, 172, 28);
+		getContentPane().add(lastMonthPayment);
+
+		final JLabel lblTotal = new JLabel("Total Amount Paid");
+		lblTotal.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblTotal.setBounds(488, 319, 153, 24);
+		getContentPane().add(lblTotal);
+
+		final JLabel lblTotalInterestPaid = new JLabel("Total Interest Paid");
+		lblTotalInterestPaid.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblTotalInterestPaid.setBounds(488, 419, 140, 27);
+		getContentPane().add(lblTotalInterestPaid);
 
 		final JTextArea creditScoreLabel2 = new JTextArea();
 		creditScoreLabel2.setFont(new Font("Georgia", Font.PLAIN, 13));
@@ -104,6 +131,51 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		creditScoreLabel2.setEditable(false);
 		creditScoreLabel2.setBounds(12, 140, 325, 54);
 		getContentPane().add(creditScoreLabel2);
+
+
+		final JLabel lblAfterNegotiations = new JLabel("After negotiations");
+		lblAfterNegotiations.setForeground(Color.GRAY);
+		lblAfterNegotiations.setBounds(12, 295, 116, 16);
+		getContentPane().add(lblAfterNegotiations);
+
+		final JLabel lblYourTradeinCan = new JLabel("Your trade-in can be all or part of a down payment");
+		lblYourTradeinCan.setForeground(Color.GRAY);
+		lblYourTradeinCan.setBounds(12, 407, 325, 16);
+		getContentPane().add(lblYourTradeinCan);
+
+		final JLabel lblAHigherCredit = new JLabel("A higher credit score means lower interest rates");
+		lblAHigherCredit.setForeground(Color.GRAY);
+		lblAHigherCredit.setBounds(12, 509, 325, 16);
+		getContentPane().add(lblAHigherCredit);
+
+		final JLabel lblSuggestedMax = new JLabel("Suggested max: 36 months for used cars, 60 for new");
+		lblSuggestedMax.setForeground(Color.GRAY);
+		lblSuggestedMax.setBounds(12, 614, 325, 16);
+		getContentPane().add(lblSuggestedMax);
+
+		final JLabel lblNewLabel_2 = new JLabel("Payment Details");
+		lblNewLabel_2.setFont(new Font("Georgia", Font.BOLD, 18));
+		lblNewLabel_2.setBounds(488, 72, 186, 39);
+		getContentPane().add(lblNewLabel_2);
+
+
+		final JLabel lblBeforeTaxesAndFee = new JLabel("(Before taxes and fees)");
+		lblBeforeTaxesAndFee.setForeground(Color.GRAY);
+		lblBeforeTaxesAndFee.setBounds(488, 176, 208, 16);
+		getContentPane().add(lblBeforeTaxesAndFee);
+
+
+		final JLabel lblNewLabel_3 = new JLabel("(Over the life of the loan)");
+		lblNewLabel_3.setForeground(Color.GRAY);
+		lblNewLabel_3.setBounds(488, 382, 159, 16);
+		getContentPane().add(lblNewLabel_3);
+
+
+
+		JLabel lastMonthBeforeTaxesAndFee = new JLabel("(Before taxes and fees)");
+		lastMonthBeforeTaxesAndFee.setForeground(Color.GRAY);
+		lastMonthBeforeTaxesAndFee.setBounds(488, 282, 208, 16);
+		getContentPane().add(lastMonthBeforeTaxesAndFee);
 
 		final JComboBox comboBox = new JComboBox();
 		comboBox.setFont(new Font("Georgia", Font.PLAIN, 13));
@@ -173,55 +245,7 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		numberOfMonthsFormattedTextField.addKeyListener(this);
 		numberOfMonthsFormattedTextField.setFocusTraversalKeysEnabled(false);
 
-		final JLabel lblAfterNegotiations = new JLabel("After negotiations");
-		lblAfterNegotiations.setForeground(Color.GRAY);
-		lblAfterNegotiations.setBounds(12, 295, 116, 16);
-		getContentPane().add(lblAfterNegotiations);
 
-		final JLabel lblYourTradeinCan = new JLabel("Your trade-in can be all or part of a down payment");
-		lblYourTradeinCan.setForeground(Color.GRAY);
-		lblYourTradeinCan.setBounds(12, 407, 325, 16);
-		getContentPane().add(lblYourTradeinCan);
-
-		final JLabel lblAHigherCredit = new JLabel("A higher credit score means lower interest rates");
-		lblAHigherCredit.setForeground(Color.GRAY);
-		lblAHigherCredit.setBounds(12, 509, 325, 16);
-		getContentPane().add(lblAHigherCredit);
-
-		final JLabel lblSuggestedMax = new JLabel("Suggested max: 36 months for used cars, 60 for new");
-		lblSuggestedMax.setForeground(Color.GRAY);
-		lblSuggestedMax.setBounds(12, 614, 325, 16);
-		getContentPane().add(lblSuggestedMax);
-
-		final JLabel lblNewLabel_2 = new JLabel("Payment Details");
-		lblNewLabel_2.setFont(new Font("Georgia", Font.BOLD, 18));
-		lblNewLabel_2.setBounds(488, 72, 186, 39);
-		getContentPane().add(lblNewLabel_2);
-
-		final JLabel lblMonthlyPayment = new JLabel("Monthly Payment ");
-		lblMonthlyPayment.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblMonthlyPayment.setBounds(488, 117, 172, 28);
-		getContentPane().add(lblMonthlyPayment);
-
-		final JLabel lblBeforeTaxesAnd = new JLabel("(Before taxes and fees)");
-		lblBeforeTaxesAnd.setForeground(Color.GRAY);
-		lblBeforeTaxesAnd.setBounds(488, 176, 208, 16);
-		getContentPane().add(lblBeforeTaxesAnd);
-
-		final JLabel lblTotal = new JLabel("Total Amount Paid");
-		lblTotal.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblTotal.setBounds(488, 319, 153, 24);
-		getContentPane().add(lblTotal);
-
-		final JLabel lblTotalInterestPaid = new JLabel("Total Interest Paid");
-		lblTotalInterestPaid.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblTotalInterestPaid.setBounds(488, 419, 140, 27);
-		getContentPane().add(lblTotalInterestPaid);
-
-		final JLabel lblNewLabel_3 = new JLabel("(Over the life of the loan)");
-		lblNewLabel_3.setForeground(Color.GRAY);
-		lblNewLabel_3.setBounds(488, 382, 159, 16);
-		getContentPane().add(lblNewLabel_3);
 
 		monthlyPaymentOutputField = new JFormattedTextField();
 		monthlyPaymentOutputField.setBackground(Color.WHITE);
@@ -280,10 +304,7 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		btnAddToTable.setFocusTraversalKeysEnabled(false);
 		getContentPane().add(btnAddToTable);
 
-		JLabel lblHistoryTable = new JLabel("History Table");
-		lblHistoryTable.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblHistoryTable.setBounds(488, 518, 140, 27);
-		getContentPane().add(lblHistoryTable);
+
 
 		//Table changes
 		JScrollPane sPane = new JScrollPane();
@@ -340,15 +361,6 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		interestRateValidator.setBounds(12, 534, 301, 16);
 		getContentPane().add(interestRateValidator);
 
-		JLabel lastMonthPayment = new JLabel("Last Month Payment");
-		lastMonthPayment.setFont(new Font("Georgia", Font.BOLD, 13));
-		lastMonthPayment.setBounds(488, 214, 172, 28);
-		getContentPane().add(lastMonthPayment);
-
-		JLabel label = new JLabel("(Before taxes and fees)");
-		label.setForeground(Color.GRAY);
-		label.setBounds(488, 282, 208, 16);
-		getContentPane().add(label);
 
 
 
@@ -427,6 +439,8 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 
 		if(carLoanConstants.getMonthlyPayment() != carLoanConstants.getLastMonthPaymet()) {
 			lastMonthPaymentTextField.setValue("$" + carLoanConstants.getLastMonthPaymet());
+		}else {
+			lastMonthPaymentTextField.setValue("");
 		}
 
 	}
