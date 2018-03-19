@@ -3,23 +3,23 @@ package com.loan;
 public class CarLoanConstants {
 
 	/** Car price constant **/
-	private double carPrice = 0.0;
+	private double carPrice = 0.00;
 
 
 	/** Trade in value constant **/
-	private double tradeInValue = 0.0;
+	private double tradeInValue = 0.00;
 
 	/** Interest rate constant **/
-	private double interestRate = 0.0;
+	private double interestRate = 0.00;
 
 	/** Number of Months Constant **/
 	private int numberOfMonths = 1;
 
-	private double monthlyPayment =0.0;
+	private double monthlyPayment =0.00;
 
-	private double totalAmountPaid =0.0;
+	private double totalAmountPaid =0.00;
 
-	private double totalInterestPaid =0.0;
+	private double totalInterestPaid =0.00;
 
 	/**
 	 * @return.

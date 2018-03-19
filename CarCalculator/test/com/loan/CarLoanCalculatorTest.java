@@ -3,7 +3,7 @@ package com.loan;
 
 
 
-import java.util.List;
+import java.math.BigDecimal;
 
 import org.junit.Assert;
 
@@ -17,60 +17,68 @@ public class CarLoanCalculatorTest extends TestCase {
 	@Override
 	protected void setUp(){
 
-		carLoanConstant = new CarLoanConstants();
-		carLoanCalculator = new CarLoanCalculator(carLoanConstant);
+
 	}
 
 
-	public void testCalculateInterestRate() throws CarLoanException{
+	public void testBigDecimal(){
+		final BigDecimal decimal = new BigDecimal(100);
 
-		carLoanConstant.setCarPrice(20000);
+		System.out.println(decimal.pow(2));
+	}
+
+	public void testCalculateInterestRate() throws CarLoanException{
+		carLoanConstant = new CarLoanConstants();
+		carLoanCalculator = new CarLoanCalculator(carLoanConstant);
+		carLoanConstant.setCarPrice(20000.0);
 		carLoanConstant.setTradeInValue(4000);
 		//cc.setInterestRate(5);
-		carLoanConstant.setMonthlyPayment(475.98);
+		carLoanConstant.setMonthlyPayment(475.95);
 		carLoanConstant.setNumberOfMonths(36);
 
-		carLoanCalculator.calculateMonthlyPayment();
+		carLoanCalculator.calculateInterestRate();
 
+		System.out.println(carLoanConstant.getInterestRate());
 		Assert.assertEquals(4.5, 4,5);
 	}
 
 	public void testCalculateMonthlyPayment(){
+		carLoanConstant = new CarLoanConstants();
+		carLoanConstant.setCarPrice(20000);
+		carLoanConstant.setTradeInValue(4000);
+		carLoanConstant.setInterestRate(4.5);
+		//cc.setMonthlyPayment(444.44);
+		carLoanConstant.setNumberOfMonths(1);
 
-		final CarLoanConstants cc = new CarLoanConstants();
-		cc.setCarPrice(20000);
-		cc.setTradeInValue(4000);
-		cc.setInterestRate(4.5);
-		//cc.setMonthlyPayment(444.44);
-		cc.setNumberOfMonths(36);
 
-		new CarLoanCalculator(cc);
-		System.out.println();
+
+		final double a=1.03;
+		final double b=.42;
+		final BigDecimal d = new BigDecimal(1.03);
+		final BigDecimal f = new BigDecimal(0.42);
+		System.out.println(" *********"+(a-b));
+		System.out.println(" *********"+(d.subtract(f)));
+		try {
+			carLoanCalculator.calculateMonthlyPayment();
+		} catch (final CarLoanException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		};
+		System.out.println(carLoanConstant.getMonthlyPayment());
 	}
-	
-	public void testGetHistoryData(){
-		final CarLoanConstants cc = new CarLoanConstants();
-		cc.setCarPrice(10000);
-		cc.setTradeInValue(4000);
-		cc.setInterestRate(4.5);
-		//cc.setMonthlyPayment(444.44);
-		cc.setNumberOfMonths(36);
-		CarLoanCalculator ccc= new CarLoanCalculator(cc);
-		ccc.addHistoryData();
-		cc.setCarPrice(20000);
-		cc.setTradeInValue(4000);
-		cc.setInterestRate(4.5);
-		//cc.setMonthlyPayment(444.44);
-		cc.setNumberOfMonths(36);
-		ccc.addHistoryData();
-		
-		System.out.println(ccc.getHistoryData().size());
-		
-		List<CarLoanConstants> carLoan= ccc.getHistoryData();
-		
-		for (CarLoanConstants ccr : carLoan) {
-			System.out.println(ccr.getCarPrice());
-		}
-		
+
+	public void testCalculateRegex() {
+		String regex = "\\d+";
+		String value1 = "10.222";
+		String value3= "10.21";
+		System.out.println(value1.matches(regex));
+		System.out.println(value3.matches(regex));
+		System.out.println("11".matches(regex));
+		System.out.println("11.1".matches(regex));
+		System.out.println("ab".matches(regex));
+		System.out.println("-11".matches(regex));
+
+
 	}
+
 }

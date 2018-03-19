@@ -1,41 +1,24 @@
 package com.loan;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.text.Document;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.TextEvent;
-import java.awt.event.TextListener;
-import java.awt.Font;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.JButton;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
-import javax.swing.border.LineBorder;
+import javax.swing.JTextArea;
+import javax.swing.table.DefaultTableModel;
 
 //import swing.LanguagesUI;
 
@@ -45,14 +28,22 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 	private double rate; // 7.5%
 	private int numPeriods = 1;
 	private double tradeInValue;
-	private JFormattedTextField carPriceFormattedTextField;
 
+	String decnumberregex = "\\d+(\\.\\d{1,2})?";
+	String numberregex = "\\d+";
+	private JFormattedTextField carPriceFormattedTextField;
 	private JFormattedTextField tradeInFormattedTextField;
 	private JFormattedTextField interestRateFormattedTextField;
 	private JFormattedTextField numberOfMonthsFormattedTextField;
 	private JFormattedTextField monthlyPaymentOutputField;
 	private JFormattedTextField totalAmountPaidField;
 	private JFormattedTextField totalInterestPaidField;
+
+	// validator attributes
+	JLabel carPriceValidator;
+	JLabel monthsValidator;
+	JLabel tradeInValidator;
+	JLabel interestRateValidator;
 
 	// Formatting the fields input and output
 	private NumberFormat carPriceFormat;
@@ -64,11 +55,9 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 	private NumberFormat numberMonthsFormat;
 	private CarLoanConstants carLoanConstants;
 	private final CarLoanCalculator carLoanCalculator;
-	private JTable historyTableField;
-	DefaultTableModel model;
+
 	Object[] row = new Object[5];
 	int rowNumber = 1;
-	private JTable table_1;
 
 	public SwingControlDemo() {
 		carLoanConstants = new CarLoanConstants();
@@ -148,7 +137,6 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		});
 
 		carPriceFormattedTextField = new JFormattedTextField(carPriceFormat);
-
 		carPriceFormattedTextField.setFont(new Font("Georgia", Font.PLAIN, 13));
 		carPriceFormattedTextField.setBounds(12, 265, 325, 28);
 		getContentPane().add(carPriceFormattedTextField);
@@ -234,7 +222,6 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		lblNewLabel_3.setBounds(488, 295, 159, 16);
 		getContentPane().add(lblNewLabel_3);
 
-
 		monthlyPaymentOutputField = new JFormattedTextField();
 		monthlyPaymentOutputField.setBackground(Color.WHITE);
 		monthlyPaymentOutputField.setForeground(Color.BLUE);
@@ -244,7 +231,7 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		monthlyPaymentOutputField.setFocusable(false);
 		getContentPane().add(monthlyPaymentOutputField);
 		monthlyPaymentOutputField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		
+
 		totalAmountPaidField = new JFormattedTextField();
 		totalAmountPaidField.setBackground(Color.WHITE);
 		totalAmountPaidField.setForeground(Color.BLUE);
@@ -254,7 +241,7 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		totalAmountPaidField.setFocusable(false);
 		getContentPane().add(totalAmountPaidField);
 		totalAmountPaidField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		
+
 		totalInterestPaidField = new JFormattedTextField();
 		totalInterestPaidField.setBackground(Color.WHITE);
 		totalInterestPaidField.setFont(new Font("Georgia", Font.PLAIN, 16));
@@ -264,7 +251,7 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		totalInterestPaidField.setFocusable(false);
 		getContentPane().add(totalInterestPaidField);
 		totalInterestPaidField.setBorder(javax.swing.BorderFactory.createEmptyBorder());
-		
+
 		JSeparator separator = new JSeparator();
 		separator.setBounds(12, 48, 841, 8);
 		getContentPane().add(separator);
@@ -274,37 +261,29 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 		lblCar.setBounds(12, 13, 345, 39);
 		getContentPane().add(lblCar);
 
-		JTable table = new JTable();
-		Object[] columnNames = { "#", "Car Price", "Trade In Value", "Rate", "# Months", "Monthly Payment" };
-		model = new DefaultTableModel();
-		model.setColumnIdentifiers(columnNames);
-		table.setModel(model);
-		table.setBackground(Color.LIGHT_GRAY);
-		table.setForeground(Color.black);
-		Font font = new Font("", 1, 22);
-		table.setFont(font);
-		table.setRowHeight(30);
-		JScrollPane pane = new JScrollPane(table);
-		getContentPane().add(pane);
-
 		btnAddToTable = new JButton("Add To Table -->");
 		btnAddToTable.setFont(new Font("Georgia", Font.PLAIN, 13));
-		btnAddToTable.setBounds(184, 643, 153, 28);
+		btnAddToTable.setBounds(184, 665, 153, 28);
 		btnAddToTable.addKeyListener(this);
 		btnAddToTable.setFocusTraversalKeysEnabled(false);
 		getContentPane().add(btnAddToTable);
 
-		table_1 = new JTable();
-		table_1.setFocusable(false);
-		table_1.setBorder(new LineBorder(new Color(0, 0, 0)));
+		JLabel lblHistoryTable = new JLabel("History Table");
+		lblHistoryTable.setFont(new Font("Georgia", Font.BOLD, 13));
+		lblHistoryTable.setBounds(488, 430, 140, 27);
+		getContentPane().add(lblHistoryTable);
 
-		DefaultTableModel model = new DefaultTableModel(
-				new Object[][] {
-						{ "Car Price", "Trade In Value", "Interest Rate", "Number Of Months", "Monthly Payment" }, },
+		//Table changes
+		JScrollPane sPane = new JScrollPane();
+		sPane.setBounds(453, 468, 418, 183);
+		getContentPane().add(sPane);
+		JTable table_1 = new JTable();
+		table_1.setFocusable(false);
+		DefaultTableModel model = new DefaultTableModel(new Object[][] {},
 				new String[] { "Car Price", "Trade In Value", "Interest Rate", "Number Of Months", "Monthly Payment" });
 		table_1.setModel(model);
-		table_1.setBounds(488, 458, 365, 213);
-
+		table_1.setFont(new Font("Georgia", Font.PLAIN, 13));
+		table_1.getTableHeader().setFont(new Font("Georgia", Font.BOLD, 10));
 		// button add row
 		btnAddToTable.addActionListener(new ActionListener() {
 
@@ -322,14 +301,32 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 			}
 		});
 
-		getContentPane().add(table_1);
+		sPane.setViewportView(table_1);
 
-		JLabel lblHistoryTable = new JLabel("History Table");
-		lblHistoryTable.setFont(new Font("Georgia", Font.BOLD, 13));
-		lblHistoryTable.setBounds(488, 430, 140, 27);
-		getContentPane().add(lblHistoryTable);
+		Font validatorFont = new Font("Georgia", Font.BOLD, 11);
+		carPriceValidator = new JLabel("");
+		carPriceValidator.setForeground(Color.RED);
+		carPriceValidator.setFont(validatorFont);
+		carPriceValidator.setBounds(12, 319, 301, 16);
+		getContentPane().add(carPriceValidator);
 
-		
+		monthsValidator = new JLabel();
+		monthsValidator.setForeground(Color.RED);
+		monthsValidator.setFont(validatorFont);
+		monthsValidator.setBounds(12, 641, 301, 16);
+		getContentPane().add(monthsValidator);
+
+		tradeInValidator = new JLabel();
+		tradeInValidator.setForeground(Color.RED);
+		tradeInValidator.setFont(validatorFont);
+		tradeInValidator.setBounds(12, 430, 301, 16);
+		getContentPane().add(tradeInValidator);
+
+		interestRateValidator = new JLabel();
+		interestRateValidator.setForeground(Color.RED);
+		interestRateValidator.setFont(validatorFont);
+		interestRateValidator.setBounds(12, 534, 301, 16);
+		getContentPane().add(interestRateValidator);
 
 	}
 
@@ -337,38 +334,60 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 	public void propertyChange(PropertyChangeEvent e) {
 		// TODO Auto-generated method stub
 		final Object source = e.getSource();
-		System.out.println("******" + carPriceFormattedTextField.getText());
 		if (source == carPriceFormattedTextField) {
-
-			carPrice = ((Number) carPriceFormattedTextField.getValue()).doubleValue();
+			if (!carPriceFormattedTextField.getText().matches(decnumberregex)) {
+				carPriceValidator.setText("Please enter the number in 0.00 format");
+				carPriceFormattedTextField.setText("0.0");
+			} else {
+				carPrice = ((Number) carPriceFormattedTextField.getValue()).doubleValue();
+			}
+			carLoanConstants.setCarPrice(carPrice);
 		}
 		if (source == interestRateFormattedTextField) {
-			rate = ((Number) interestRateFormattedTextField.getValue()).doubleValue();
+			if (!interestRateFormattedTextField.getText().matches(decnumberregex)) {
+				interestRateValidator.setText("Please enter the number in 0.00 format");
+				interestRateFormattedTextField.setText("0.0");
+			} else {
+				rate = ((Number) interestRateFormattedTextField.getValue()).doubleValue();
+			}
+
+			if (rate < 0.0) {
+				interestRateFormattedTextField.setValue(0.0);
+			}
+			carLoanConstants.setInterestRate(rate);
 		}
 		if (source == numberOfMonthsFormattedTextField) {
-			numPeriods = ((Number) numberOfMonthsFormattedTextField.getValue()).intValue();
+			if (!numberOfMonthsFormattedTextField.getText().matches(numberregex)) {
+				monthsValidator.setText("Number of months should be between 1 & 84");
+				numberOfMonthsFormattedTextField.setText("1");
+			} else if (Integer.valueOf(numberOfMonthsFormattedTextField.getText()) > 84
+					|| Integer.valueOf(numberOfMonthsFormattedTextField.getText()) < 1) {
+				monthsValidator.setText("Number of months should be between 1 & 84");
+				numberOfMonthsFormattedTextField.setText("1");
+
+			} else {
+				numPeriods = ((Number) numberOfMonthsFormattedTextField.getValue()).intValue();
+			}
+
+			if (numPeriods < 0 || numPeriods == 0 ) {
+				numberOfMonthsFormattedTextField.setValue(1);
+			}
+
+			carLoanConstants.setNumberOfMonths(numPeriods);
 
 		}
 		if (source == tradeInFormattedTextField) {
-			tradeInValue = ((Number) tradeInFormattedTextField.getValue()).intValue();
+			if (!tradeInFormattedTextField.getText().matches(decnumberregex)) {
+				tradeInValidator.setText("Please enter the number in 0.00 format");
+				tradeInFormattedTextField.setText("0.0");
+			}
+			else{
+				tradeInValue = ((Number) tradeInFormattedTextField.getValue()).intValue();
+			}
+			carLoanConstants.setTradeInValue(tradeInValue);
 		}
 
-		carLoanConstants.setCarPrice(carPrice);
-		System.out.println("** Inside Swing demo Car Price " + carPrice);
-		if (rate < 0.0) {
-			interestRateFormattedTextField.setValue(0.0);
-		}
-		carLoanConstants.setInterestRate(rate);
-
-		carLoanConstants.setTradeInValue(tradeInValue);
-		System.out.println("**TradeIn value " + tradeInValue);
-		if (numPeriods < 0) {
-			numberOfMonthsFormattedTextField.setValue(1);
-		}
-
-		carLoanConstants.setNumberOfMonths(numPeriods);
-		System.out.println("*Number Periods " + numPeriods);
-
+		//sequence calculation
 		try {
 			carLoanCalculator.calculateMonthlyPayment();
 			carLoanCalculator.calculateTotalAmountPaid();
@@ -401,19 +420,19 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("Key is pressed");
+		carPriceValidator.setText("");
+		monthsValidator.setText("");
+		tradeInValidator.setText("");
+		interestRateValidator.setText("");
 
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("Key is released" + carPriceFormattedTextField.getText());
 		if (e.getKeyCode() == KeyEvent.VK_TAB) {
-			System.out.println("********Tab key");
 
 			if (e.getSource().equals(carPriceFormattedTextField)) {
+
 				if (carPriceFormattedTextField.getText().isEmpty()) {
 					try {
 						carLoanCalculator.calculateCarPrice();
@@ -422,6 +441,9 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 						e1.printStackTrace();
 					}
 					carPriceFormattedTextField.setText(String.valueOf(carLoanConstants.getCarPrice()));
+				}else if (!carPriceFormattedTextField.getText().matches(decnumberregex)) {
+					carPriceValidator.setText("Please enter the number in 0.00 format");
+					carPriceFormattedTextField.setText("0.0");
 				}
 				if (e.getModifiers() > 0) {
 					carPriceFormattedTextField.transferFocusBackward();
@@ -429,7 +451,11 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 					carPriceFormattedTextField.transferFocus();
 					// btnAddToTable.transferFocusUpCycle();
 				}
-			} else if (e.getSource().equals(interestRateFormattedTextField)) {
+
+			}
+			// interestRateFormatted test
+			else if (e.getSource().equals(interestRateFormattedTextField)) {
+
 				if (interestRateFormattedTextField.getText().isEmpty()) {
 					try {
 						carLoanCalculator.calculateInterestRate();
@@ -438,6 +464,9 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 						e1.printStackTrace();
 					}
 					interestRateFormattedTextField.setText(String.valueOf(carLoanConstants.getInterestRate()));
+				}else if (!interestRateFormattedTextField.getText().matches(decnumberregex)) {
+					interestRateValidator.setText("Please enter the number in 0.00 format");
+					interestRateFormattedTextField.setText("0.0");
 				}
 				if (e.getModifiers() > 0) {
 					interestRateFormattedTextField.transferFocusBackward();
@@ -445,19 +474,27 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 					interestRateFormattedTextField.transferFocus();
 					// btnAddToTable.transferFocusUpCycle();
 				}
-			} else
-
-			if (e.getSource().equals(tradeInFormattedTextField)) {
+			} else if (e.getSource().equals(tradeInFormattedTextField)) {
 				if (tradeInFormattedTextField.getText().isEmpty()) {
+					try {
+						carLoanCalculator.calculateTradeInValue();
+					} catch (CarLoanException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					tradeInFormattedTextField.setText(String.valueOf(carLoanConstants.getTradeInValue()));
+				}else if (!tradeInFormattedTextField.getText().matches(decnumberregex)) {
+					tradeInValidator.setText("Please enter the number in 0.00 format");
 					tradeInFormattedTextField.setText("0.0");
 				}
 				if (e.getModifiers() > 0) {
 					tradeInFormattedTextField.transferFocusBackward();
 				} else {
 					tradeInFormattedTextField.transferFocus();
-					// btnAddToTable.transferFocusUpCycle();
 				}
-			} else if (e.getSource().equals(numberOfMonthsFormattedTextField)) {
+			} // number of months calculation
+			else if (e.getSource().equals(numberOfMonthsFormattedTextField)) {
+
 				if (numberOfMonthsFormattedTextField.getText().isEmpty()) {
 					try {
 						carLoanCalculator.calculateNumberOfMonths();
@@ -466,6 +503,14 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 						e1.printStackTrace();
 					}
 					numberOfMonthsFormattedTextField.setText(String.valueOf(carLoanConstants.getNumberOfMonths()));
+				}else if (!numberOfMonthsFormattedTextField.getText().matches(numberregex)) {
+					monthsValidator.setText("Number of months should be between 1 & 84");
+					numberOfMonthsFormattedTextField.setText("1");
+				} else if (Integer.valueOf(numberOfMonthsFormattedTextField.getText()) > 84
+						|| Integer.valueOf(numberOfMonthsFormattedTextField.getText()) < 1) {
+					monthsValidator.setText("Number of months should be between 1 & 84");
+					numberOfMonthsFormattedTextField.setText("1");
+
 				}
 				if (e.getModifiers() > 0) {
 					numberOfMonthsFormattedTextField.transferFocusBackward();
@@ -491,7 +536,5 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		System.out.println("key is typed");
 	}
 }
