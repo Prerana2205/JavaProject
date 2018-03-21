@@ -1,8 +1,6 @@
 package com.loan;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * CarLoan Calculator class which calculates the interest rate,
@@ -154,6 +152,7 @@ public class CarLoanCalculator {
 	/**
 	 * Method to calculate number of months
 	 */
+
 	public void calculateNumberOfMonths() {
 
 		System.out.println("***** Inside calculateNumberOfMonths *******");
@@ -161,21 +160,17 @@ public class CarLoanCalculator {
 		final double monthlyPayment = carLoanConstants.getMonthlyPayment();
 		final double monthlyInterestRate = getMonthlyInterestRate();
 		final double carPrice = getCarPriceWithoutTradeInValue();
-		int n=1;
 
+		int numberOfMonths = 0;
 		if (monthlyInterestRate == 0 || monthlyInterestRate==0.0) {
-			n = (int) (carPrice/monthlyPayment);
-		} else {
-			if ((monthlyInterestRate * carPrice
-					/ (1 - Math.pow((1 + monthlyInterestRate), (0 - n)))) > monthlyPayment) {
-				//System.out.println("n is " + n);
-				//
-				n++;
-				calculateNumberOfMonths();
-			}
-
+			numberOfMonths = (int) (carPrice/monthlyPayment);
 		}
-		carLoanConstants.setNumberOfMonths(n-1);
+		else {
+			numberOfMonths= (int) (-(Math.log(1-((carPrice * monthlyInterestRate)/monthlyPayment)))/Math.log(1+monthlyInterestRate));
+		}
+
+		carLoanConstants.setNumberOfMonths(numberOfMonths);
+
 	}
 
 	/**
@@ -237,65 +232,6 @@ public class CarLoanCalculator {
 
 	}
 
-
-
-
-	public List<LoanAmortization> createAmortizationTable(CarLoanConstants carLoanConstants) {
-		double principle;
-		double payment; // constant
-		double interestPaid;
-		double principlePaid;
-		double balance;
-		double monthlyInterest; // constant
-		int n;
-		double totalPrinciplePaid = 0.0;
-
-		payment = carLoanConstants.getMonthlyPayment();
-		principle = getCarPriceWithoutTradeInValue();
-		monthlyInterest = carLoanConstants.getInterestRate() / 12 / 100;
-		n = carLoanConstants.getNumberOfMonths();
-
-		final double x[] = new double[n];
-		final double y[] = new double[n];
-
-		interestPaid = principle * monthlyInterest;
-		principlePaid = payment - interestPaid;
-		balance = principle - principlePaid;
-
-		final List<LoanAmortization> loanAmortization = new ArrayList<>();
-
-		System.out.println("Month\tPrinciple\t\tMonthlyPayment\t\t InterestPaid\t\tPrinciplePaid\t\tBalance\n");
-		double totalAmountPaid = 0.0;
-		double totalInterestPaid = 0.0;
-
-		for (int i = 0; i < n; i++) {
-			final LoanAmortization la = new LoanAmortization(principle, payment, interestPaid, principlePaid, balance);
-			loanAmortization.add(la);
-			x[i] = interestPaid;
-			y[i] = principle;
-
-			totalInterestPaid = carLoanConstants.getTotalInterestPaid() + interestPaid;
-			totalPrinciplePaid = totalPrinciplePaid + principlePaid;
-			System.out.println(i + "\t" + principle + "\t\t" + payment + "\t\t" + interestPaid + "\t\t" + principlePaid
-					+ "\t\t" + balance);
-
-			principle = balance;
-			interestPaid = principle * monthlyInterest;
-			principlePaid = payment - interestPaid;
-			balance = principle - principlePaid;
-
-			if (balance < 0) {
-				balance = 0;
-			}
-
-			totalAmountPaid = carLoanConstants.getTotalAmountPaid() + payment;
-
-		}
-		System.out.println("TotalAmountPaid:\tTotalInterestPaid:\t TotalPrinciplePaid");
-		System.out.println(totalAmountPaid + "\t\t" + totalInterestPaid + "\t\t" + totalPrinciplePaid);
-		//System.out.println(loanAmortization.get(1));
-		return loanAmortization;
-	}
 
 	public void createHistoryTable() {
 		System.out.println("\tCarPrice" + carLoanConstants.getCarPrice() + "\tTradeInvalue"
