@@ -21,6 +21,7 @@ public class CarLoanCalculatorTest extends TestCase {
 	}
 
 	public void testCalculateInterestRate() {
+
 		doTest(20000, 4000, 0, 475.95, 36);
 
 		carLoanCalculator.calculateInterestRate();
@@ -32,8 +33,8 @@ public class CarLoanCalculatorTest extends TestCase {
 		doTest(20000, 4000, 4.5, 0, 36);
 
 		carLoanCalculator.calculateMonthlyPayment();
-		Assert.assertNotNull(carLoanConstant.getMonthlyPayment());
 		System.out.println(carLoanConstant.getMonthlyPayment());
+		Assert.assertNotNull(carLoanConstant.getMonthlyPayment());
 		Assert.assertEquals(475.95, carLoanConstant.getMonthlyPayment(), 0.3);
 
 	}
@@ -56,6 +57,7 @@ public class CarLoanCalculatorTest extends TestCase {
 
 		carLoanCalculator.calculateNumberOfMonths();
 		Assert.assertNotNull(carLoanConstant.getNumberOfMonths());
+		Assert.assertEquals(36, carLoanConstant.getNumberOfMonths(), 0);
 	}
 
 	public void doTest(double carPrice, double tradeInValue, double interestRate, double monthlyPayment,
