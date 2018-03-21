@@ -5,8 +5,6 @@ import java.awt.Dimension;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-//import swing.LanguagesUI;
-
 public class CarLoanCalculatorMain {
 
 	public static void main(String[] args) {

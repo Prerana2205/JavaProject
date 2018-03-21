@@ -31,6 +31,7 @@ public class SwingControlDemo extends javax.swing.JFrame implements PropertyChan
 
 	String decnumberregex = "\\d+(\\.\\d{1,2})?";
 	String numberregex = "\\d+";
+
 	private JFormattedTextField carPriceFormattedTextField;
 	private JFormattedTextField tradeInFormattedTextField;
 	private JFormattedTextField interestRateFormattedTextField;

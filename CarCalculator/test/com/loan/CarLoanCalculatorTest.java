@@ -39,18 +39,17 @@ public class CarLoanCalculatorTest extends TestCase {
 
 	}
 
-	public void testCalculateRegex() {
-		String regex = "\\d+";
-		String value1 = "10.222";
-		String value3 = "10.21";
-		System.out.println(value1.matches(regex));
-		System.out.println(value3.matches(regex));
-		System.out.println("11".matches(regex));
-		System.out.println("11.1".matches(regex));
-		System.out.println("ab".matches(regex));
-		System.out.println("-11".matches(regex));
+
+	public void testCalculateLastMonthlyPayment() {
+		doTest(20000, 4000, 4.5, 0, 36);
+
+		carLoanCalculator.calculateMonthlyPayment();
+		System.out.println(carLoanConstant.getLastMonthPaymet());
+		Assert.assertNotNull(carLoanConstant.getLastMonthPaymet());
+		Assert.assertEquals(475.98, carLoanConstant.getLastMonthPaymet(), 0.0);
 
 	}
+
 
 	public void testCalculateNumberOfMonths() {
 		doTest(20000, 4000, 4.5, 475.95, 0);
@@ -72,6 +71,8 @@ public class CarLoanCalculatorTest extends TestCase {
 		carLoanConstant.setMonthlyPayment(monthlyPayment);
 		carLoanConstant.setNumberOfMonths(numberOfMonths);
 		carLoanCalculator = new CarLoanCalculator(carLoanConstant);
+
+		Assert.assertNotNull(carLoanCalculator);
 	}
 
 }
